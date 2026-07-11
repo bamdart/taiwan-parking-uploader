@@ -15,7 +15,7 @@ from PySide6.QtCore import QObject, QTimer, Signal
 
 
 class LogManager(QObject):
-    """JSONL log 管理器，含內存 ring buffer 供 GUI 即時顯示。"""
+    """JSONL log 管理器，含記憶體 ring buffer 供 GUI 即時顯示。"""
 
     log_entry_added = Signal(dict)
 
@@ -59,7 +59,7 @@ class LogManager(QObject):
         self._write("debug", message, data)
 
     def get_buffer(self) -> list[dict]:
-        """回傳內存 buffer 的複本。"""
+        """回傳記憶體 buffer 的複本。"""
         return list(self._buffer)
 
     # ------------------------------------------------------------------
