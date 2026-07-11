@@ -1,0 +1,26 @@
+# -------- Python --------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# -------- 設定與機密（切勿提交帳密）--------
+.env
+.env.local
+
+# -------- 執行時產生的檔案（全部集中於 logs/）--------
+# schedule.json、scheduler-*.jsonl、scheduler-crash.log、.scheduler.lock 皆位於此
+logs/
+
+# -------- PyInstaller 建置產物 --------
+build/
+dist-pyinstaller/
+*.spec
+
+# -------- OS / 編輯器 --------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

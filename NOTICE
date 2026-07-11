@@ -1,0 +1,14 @@
+taiwan-parking-uploader
+Copyright 2026 Heimdall Intelligent Technology Co., Ltd. (HITech 海姆達爾智慧科技)
+
+This product is licensed under the Apache License, Version 2.0.
+See the LICENSE file for the full license text.
+
+Official website: https://www.hitech.com.tw/zh/
+
+This software depends on the following third-party open-source components,
+each distributed under its own license:
+
+  - PySide6 (Qt for Python)  — LGPL v3 / GPL
+  - Requests                 — Apache License 2.0
+  - PyInstaller              — GPL with a bootloader exception (build-time only)

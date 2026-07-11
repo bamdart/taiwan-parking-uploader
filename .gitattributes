@@ -1,0 +1,11 @@
+# 統一換行為 LF（跨平台一致，避免 Windows 提交造成 CRLF 雜訊）
+* text=auto eol=lf
+
+# Windows 批次檔用 CRLF
+*.bat text eol=crlf
+
+# 二進位資產不做換行轉換
+*.ico binary
+*.exe binary
+*.png binary
+*.jpg binary
