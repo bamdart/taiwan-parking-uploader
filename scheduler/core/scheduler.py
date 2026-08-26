@@ -63,6 +63,8 @@ class SchedulerEngine(QObject):
 
         # 各城市狀態
         self._city_status: dict[str, dict] = {}
+        # 各城市上次成功對齊觸發的分鐘數（避免計時器抖動造成同一分鐘被觸發兩次）
+        self._last_fired_minute: dict[str, int] = {}
 
     # ------------------------------------------------------------------
     # Signals for GUI
@@ -172,6 +174,11 @@ class SchedulerEngine(QObject):
             # 非強制模式下才檢查時間對齊
             if not force and not self._should_execute(minutes_since_midnight, interval):
                 continue
+
+            # 計時器抖動可能讓同一分鐘被 tick 兩次，避免對同一格重複觸發
+            if not force and self._last_fired_minute.get(target) == minutes_since_midnight:
+                continue
+            self._last_fired_minute[target] = minutes_since_midnight
 
             self._submit_upload(target, city_config)
 

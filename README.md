@@ -95,12 +95,12 @@ dist-pyinstaller\臺灣停車資料上傳系統-<版本>.exe
 
    ```bash
    gh release create v1.1.0 \
-     "dist-pyinstaller/臺灣停車資料上傳系統-1.1.0.exe" \
-     --title "v1.1.0" \
+     "dist-pyinstaller/臺灣停車資料上傳系統-1.1.1.exe" \
+     --title "v1.1.1" \
      --notes "更新內容..."
    ```
 
-   或在 GitHub 網頁 **Releases → Draft a new release**，tag 填 `v1.1.0`，
+   或在 GitHub 網頁 **Releases → Draft a new release**，tag 填 `v1.1.1`，
    把 `.exe` 拖到附件區即可。
 
 使用者到 Releases 頁下載那一個 `.exe`、直接執行就能用。
