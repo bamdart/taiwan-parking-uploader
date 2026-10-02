@@ -14,6 +14,7 @@ from __future__ import annotations
 from .base import CityPlugin, CredentialField, ValueField
 from .newtaipei import NewTaipeiPlugin
 from .taichung import TaichungPlugin
+from .taipei import TaipeiPlugin
 
 REGISTRY: dict[str, CityPlugin] = {}
 
@@ -39,9 +40,10 @@ def city_keys() -> list[str]:
 
 
 # ------------------------------------------------------------------
-# 註冊各縣市（順序即 UI 顯示順序）
+# 註冊各縣市（順序即 UI 顯示順序，依身分證字號字母順序：A 臺北市、B 臺中市、F 新北市）
 # ------------------------------------------------------------------
 
+register(TaipeiPlugin())
 register(TaichungPlugin())
 register(NewTaipeiPlugin())
 

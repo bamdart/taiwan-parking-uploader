@@ -40,6 +40,7 @@ see [docs/ADD_A_CITY.md](docs/ADD_A_CITY.md). Licensed under Apache-2.0.
 |------|------|------|
 | 臺中市交通局 | SOAP（Report / ReportWithMotor） | 支援汽車 + 機車位，官方要求每 10 分鐘補傳 |
 | 新北市交通局 | SOAP（upRealTimeNum） | 手動上傳為主，送出時自動帶入民國日期/時間 |
+| 臺北市停車管理工程處 | JSON（ParkingLotRemain，header 帶 APIKey） | 官方要求每分鐘上傳，支援汽車、機車、大型重機、大客車、身障優先、婦幼優先剩餘位，沒有該車種留空即可 |
 
 > 想新增縣市？見 [docs/ADD_A_CITY.md](docs/ADD_A_CITY.md)。
 

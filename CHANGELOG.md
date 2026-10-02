@@ -3,6 +3,15 @@
 本專案遵循 [語意化版本](https://semver.org/lang/zh-TW/)。
 版本號的單一來源是 `scheduler/branding.py` 的 `APP_VERSION`。
 
+## [Unreleased]
+
+### 新增
+- 支援臺北市停車管理工程處剩餘車位上傳（ParkingLotRemain JSON API，header 帶 APIKey，
+  預設每分鐘上傳；支援汽車、機車、大型重機、大客車、身障優先、婦幼優先六種剩餘位，
+  留空即表示無此車種）。
+- 縣市外掛可回傳 `headers` 帶額外 HTTP header；`dynamicFields` 支援 JSON body 與
+  `datetime`（YYYY-MM-DD HH:MM:SS）格式；`ValueField` 新增 `blank_value`（允許留空，送出時自動帶入）。
+
 ## [1.1.0] - 2026-07-11
 
 首次公開版本。

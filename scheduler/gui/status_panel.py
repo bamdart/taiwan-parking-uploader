@@ -16,6 +16,7 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import (
     QCheckBox,
+    QGridLayout,
     QGroupBox,
     QHBoxLayout,
     QLabel,
@@ -112,13 +113,22 @@ class EditableCityCard(QGroupBox):
 
         # 車位數欄位（依縣市外掛 value_fields 動態建立，每列最多兩欄）
         self._value_inputs: dict[str, QLineEdit] = {}
+        # 允許留空的欄位：key → 留空時送出的值（UI 上留空顯示，不對使用者揭露此值）
+        self._blank_values: dict[str, int] = {}
+        # 以 grid 排版：label 靠右緊貼 input，兩組之間留間距，多餘寬度推到最右欄
         value_fields = plugin.value_fields if plugin else []
-        for i in range(0, len(value_fields), 2):
-            row = QHBoxLayout()
-            for vf in value_fields[i:i + 2]:
-                row.addLayout(self._make_field(vf.key, vf.label))
-            row.addStretch()
-            layout.addLayout(row)
+        grid = QGridLayout()
+        grid.setHorizontalSpacing(6)
+        grid.setVerticalSpacing(6)
+        for i, vf in enumerate(value_fields):
+            row, pair = divmod(i, 2)
+            col = pair * 3  # 每組佔 label / input / 間距 三欄
+            label, edit = self._make_field(vf.key, vf.label, vf.blank_value)
+            grid.addWidget(label, row, col, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            grid.addWidget(edit, row, col + 1)
+        grid.setColumnMinimumWidth(2, 24)
+        grid.setColumnStretch(5, 1)
+        layout.addLayout(grid)
 
         # 上傳結果 / 提示訊息
         self._result_label = QLabel("")
@@ -158,18 +168,21 @@ class EditableCityCard(QGroupBox):
         """切換 checkbox 時顯示/隱藏「下次」。"""
         self._next_upload.setVisible(checked)
 
-    def _make_field(self, key: str, label_text: str) -> QHBoxLayout:
-        """建立一組：label + 輸入欄。"""
-        group = QHBoxLayout()
-        group.setSpacing(4)
-
-        group.addWidget(_make_form_label(label_text))
+    def _make_field(
+        self, key: str, label_text: str, blank_value: int | None = None
+    ) -> tuple[QLabel, QLineEdit]:
+        """建立一組：label + 輸入欄（由呼叫端放入 grid）。"""
+        label = _make_form_label(label_text)
 
         edit = _make_int_input()
+        if blank_value is not None:
+            edit.setText("")
+            edit.setPlaceholderText("可留空")
+            edit.setToolTip("沒有此車種請留空")
+            self._blank_values[key] = blank_value
         self._value_inputs[key] = edit
-        group.addWidget(edit)
 
-        return group
+        return label, edit
 
     # ------------------------------------------------------------------
     # Config ↔ UI
@@ -196,11 +209,22 @@ class EditableCityCard(QGroupBox):
 
         values = config.get("values", {})
         for key, edit in self._value_inputs.items():
-            edit.setText(str(values.get(key, 0)))
+            value = values.get(key, self._blank_values.get(key, 0))
+            if key in self._blank_values and value == self._blank_values[key]:
+                edit.setText("")
+            else:
+                edit.setText(str(value))
 
     def _collect_values(self) -> dict:
         """從 UI 收集目前的設定值。"""
-        values = {key: self._get_int(edit) for key, edit in self._value_inputs.items()}
+        values = {
+            key: (
+                self._blank_values[key]
+                if key in self._blank_values and not edit.text().strip()
+                else self._get_int(edit)
+            )
+            for key, edit in self._value_inputs.items()
+        }
         return {
             "enabled": self._enabled_cb.isChecked(),
             "intervalMinutes": self._get_int(self._interval_input),

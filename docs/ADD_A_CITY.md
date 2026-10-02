@@ -1,6 +1,6 @@
 # 如何新增一個縣市
 
-> 最後更新：2026-07-11
+> 最後更新：2026-10-02
 
 本工具採「每縣市一個檔案」的外掛設計。新增一個縣市**只需兩步**，不必改動
 `config` / `scheduler` / GUI —— 它們會自動套用你的新縣市。
@@ -95,11 +95,34 @@ class KaohsiungPlugin(CityPlugin):
 ### 需要動態欄位（如民國日期/時間）？
 
 回傳 entry 時多帶一個 `dynamicFields`，`uploader` 會在送出前替換 `body` 中對應
-tag 的內容。目前支援：`rocDate`（民國年月日）、`hhmmss`（時分秒）。範例見
+tag 的內容。目前支援：`rocDate`（民國年月日）、`hhmmss`（時分秒）、
+`datetime`（`YYYY-MM-DD HH:MM:SS`）。範例見
 [`scheduler/cities/newtaipei.py`](../scheduler/cities/newtaipei.py)：
 
 ```python
 "dynamicFields": {"recDate": "rocDate", "recTime": "hhmmss"},
+```
+
+### 服務不是 SOAP（JSON + API Key header）？
+
+`body` 直接放 JSON 字串、`contentType` 改 `application/json; charset=utf-8`、
+`soapAction` 給空字串，額外 header 放在 `headers`。`dynamicFields` 對 JSON body
+一樣有效（替換 `"tag": "..."` 的值）。範例見
+[`scheduler/cities/taipei.py`](../scheduler/cities/taipei.py)：
+
+```python
+"soapAction": "",
+"contentType": "application/json; charset=utf-8",
+"headers": {"APIKey": api_key},
+"body": json.dumps(payload, ensure_ascii=False),
+"dynamicFields": {"UpdateTime": "datetime"},
+```
+
+車位欄位允許留空（如臺北市「無此車種」）時，`ValueField` 帶 `blank_value`：
+使用者留空，送出時自動帶入該值（UI 只顯示留空，不顯示此值）。
+
+```python
+ValueField(key="motorRemaining", label="機車剩餘", blank_value=-9),
 ```
 
 ## 步驟二：註冊

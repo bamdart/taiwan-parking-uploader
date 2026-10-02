@@ -17,6 +17,7 @@ POST 上傳到**各縣市主管機關的官方 API**。除此之外不做任何�
 | ------ | ----------------------------------------- |
 | 臺中市 | `https://tcgis.taichung.gov.tw/...`       |
 | 新北市 | `https://www.parkinginfo.ntpc.gov.tw/...` |
+| 臺北市 | `https://ParkDataRT.pma.gov.tw/...`       |
 
 - **沒有任何 analytics、telemetry、遙測、回報或「呼叫母船」的行為。**
 - 全專案唯一發出 HTTP 請求的程式碼在 [`scheduler/core/uploader.py`](scheduler/core/uploader.py)

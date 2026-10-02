@@ -1,6 +1,6 @@
 # taiwan-parking-uploader 系統架構文件
 
-> 最後更新：2026-07-11
+> 最後更新：2026-10-02
 > 維護指引：新增或修改模組時，請同步更新此文件與 `FILE_REFERENCE.md`
 
 ## 1. 專案概述
@@ -50,7 +50,7 @@ PySide6 桌面 GUI 應用程式，定時（或手動）把停車場即時剩餘�
 - 註冊表：`scheduler/cities/__init__.py`（`REGISTRY` / `register` / `get_city` /
   `all_cities` / `city_keys`）。
 - 介面：`scheduler/cities/base.py` 的 `CityPlugin` + `CredentialField` + `ValueField`。
-- 每縣市檔（如 `taichung.py`）宣告欄位、實作 `build_entry`（SOAP 格式）與
+- 每縣市檔（如 `taichung.py`）宣告欄位、實作 `build_entry`（SOAP 或 JSON 請求格式）與
   `interpret_body`（回應解析）。
 - **與縣市無關的層一律走註冊表**：
   - `config.credentials/needs_setup/visible_cities/build_schedule`

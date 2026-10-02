@@ -1,6 +1,6 @@
 # taiwan-parking-uploader 檔案參考手冊
 
-> 最後更新：2026-07-11
+> 最後更新：2026-10-02
 > 維護指引：新增或修改檔案時，請同步更新此文件
 
 ## 根目錄
@@ -27,7 +27,7 @@
 |------|--------------|------|
 | `config.py` | `ConfigManager` | 讀寫 `.env`/`schedule.json`；`credentials()`/`needs_setup()`/`visible_cities()`/`build_schedule()` 皆走註冊表；監聽檔案變更 |
 | `scheduler.py` | `SchedulerEngine` | 每分鐘 tick、對齊間隔、`QThreadPool` 背景上傳 |
-| `uploader.py` | `upload()` | 唯一發 HTTP 的模組；處理 `dynamicFields` 後 POST |
+| `uploader.py` | `upload()` | 唯一發 HTTP 的模組；處理 `dynamicFields`（XML tag / JSON key）後 POST，可帶外掛指定的額外 `headers` |
 | `soap.py` | `wrap_envelope()`, `SVC_NS` | 共用 SOAP 打包 helper（不 import Qt） |
 | `net_errors.py` | `interpret_upload_result()` 等 | 網路/HTTP 錯誤翻譯 + 通用結果流程（不 import Qt） |
 | `logger.py` | `LogManager` | JSONL log，含記憶體 buffer 與逾期清除 |
@@ -41,6 +41,7 @@
 | `base.py` | `CityPlugin`, `CredentialField`, `ValueField` | 外掛介面與欄位宣告型別（不 import Qt） |
 | `taichung.py` | `TaichungPlugin` | 臺中市：Report / ReportWithMotor（含機車位） |
 | `newtaipei.py` | `NewTaipeiPlugin` | 新北市：upRealTimeNum（含動態日期/時間欄位） |
+| `taipei.py` | `TaipeiPlugin` | 臺北市：ParkingLotRemain JSON API（header 帶 APIKey，動態 UpdateTime，六種車種欄位，留空即視為無此車種） |
 
 > 新增縣市見 `ADD_A_CITY.md`。
 

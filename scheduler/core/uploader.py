@@ -1,8 +1,8 @@
 """
 core/uploader.py - HTTP POST 上傳模組
 
-讀取 schedule.json 中的完整 HTTP 請求參數（endpoint, soapAction, contentType, body），
-處理 dynamicFields 動態替換後直接 POST。不負責組裝 XML。
+讀取 schedule.json 中的完整 HTTP 請求參數（endpoint, soapAction, contentType, body，
+以及選填的 headers），處理 dynamicFields 動態替換後直接 POST。不負責組裝 XML / JSON。
 """
 
 import re
@@ -14,16 +14,19 @@ import requests
 _DYNAMIC_FORMATS = {
     "rocDate": lambda now: f"{now.year - 1911:03d}{now.month:02d}{now.day:02d}",
     "hhmmss": lambda now: f"{now.hour:02d}{now.minute:02d}{now.second:02d}",
+    "datetime": lambda now: now.strftime("%Y-%m-%d %H:%M:%S"),
 }
 
 _REQUEST_TIMEOUT = 30
 
 
 def _apply_dynamic_fields(body: str, dynamic_fields: dict) -> str:
-    """替換 body 中 <tag>...</tag> 的值。
+    """替換 body 中 <tag>...</tag>（XML）或 "tag": "..."（JSON）的值。
 
     dynamic_fields 格式：{"recDate": "rocDate", "recTime": "hhmmss"}
     會將 <recDate>...</recDate> 替換為民國年月日，<recTime>...</recTime> 替換為時分秒。
+    JSON body 同理：{"UpdateTime": "datetime"} 會把 "UpdateTime": "..." 換成
+    YYYY-MM-DD HH:MM:SS。
     """
     now = datetime.now()
     for tag, fmt_key in dynamic_fields.items():
@@ -34,6 +37,9 @@ def _apply_dynamic_fields(body: str, dynamic_fields: dict) -> str:
         # 替換 <tag>任意內容</tag> → <tag>新值</tag>
         pattern = rf"(<{re.escape(tag)}>)([\s\S]*?)(</{re.escape(tag)}>)"
         body = re.sub(pattern, rf"\g<1>{value}\g<3>", body)
+        # 替換 "tag": "任意內容" → "tag": "新值"（JSON body）
+        json_pattern = rf'("{re.escape(tag)}"\s*:\s*")([^"]*)(")'
+        body = re.sub(json_pattern, rf"\g<1>{value}\g<3>", body)
     return body
 
 
@@ -41,7 +47,7 @@ def upload(config: dict) -> dict:
     """執行單次上傳。
 
     config 需包含：endpoint, soapAction, contentType, body, successPattern
-    可選：dynamicFields
+    可選：dynamicFields、headers（額外 HTTP header，如 API Key）
 
     回傳 {"success": bool, "message": str}
     """
@@ -65,7 +71,7 @@ def upload(config: dict) -> dict:
     if dynamic_fields:
         body = _apply_dynamic_fields(body, dynamic_fields)
 
-    headers = {"Content-Type": content_type}
+    headers = {"Content-Type": content_type, **config.get("headers", {})}
     if soap_action:
         headers["SOAPAction"] = soap_action
 

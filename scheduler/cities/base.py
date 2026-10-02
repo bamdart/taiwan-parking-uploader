@@ -30,6 +30,7 @@ class ValueField:
 
     key: str              # schedule values 中的 key，如 "totalCount"
     label: str            # UI 顯示標籤，如 "總車位"
+    blank_value: int | None = None  # 允許留空：留空時送出此值（如臺北市無此車種送 -9）；None = 不可留空，空白視為 0
 
 
 class CityPlugin:
@@ -73,6 +74,7 @@ class CityPlugin:
         回傳的 dict 需包含排程器 POST 所需的全部欄位：
         endpoint / soapAction / contentType / body / successPattern / displayLabel，
         以及 enabled / intervalMinutes / values。排程器會原封不動送出。
+        非 SOAP 服務 soapAction 給空字串；需額外 header（如 API Key）時帶 headers。
 
         credentials 為 config 依 credential_fields 組出的 dict（key 為各
         CredentialField.name），另含 "endpoint" 一項。
