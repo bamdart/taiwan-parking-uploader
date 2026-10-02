@@ -21,7 +21,8 @@ APP_VERSION = "1.1.2"
 APP_NAME = "HITech 臺灣停車資料上傳系統"
 
 # 發佈用的執行檔基底名稱，build.bat 產出 <RELEASE_NAME>-<APP_VERSION>.exe
-RELEASE_NAME = "臺灣停車資料上傳系統"
+# 發佈檔名只能用英文（與歷次 GitHub Release 一致）
+RELEASE_NAME = "taiwan-parking-uploader"
 
 # ------------------------------------------------------------------
 # 公司資訊（顯示於主視窗底部資訊列）

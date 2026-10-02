@@ -75,7 +75,7 @@ build.bat
 runtime DLL（目標電腦免安裝 Visual C++ Redistributable）。完成後產物為：
 
 ```
-dist-pyinstaller\臺灣停車資料上傳系統-<版本>.exe
+dist-pyinstaller	aiwan-parking-uploader-<版本>.exe
 ```
 
 此 `.exe` 為單一自帶檔，可直接複製到其他電腦執行；首次啟動會跳出設定精靈，
@@ -83,20 +83,20 @@ dist-pyinstaller\臺灣停車資料上傳系統-<版本>.exe
 [`scheduler/branding.py`](scheduler/branding.py)：`RELEASE_NAME`（發佈檔名）與
 `APP_VERSION`（版本）。
 
-> 打包時 PyInstaller 內部先以 ASCII 名稱編譯，最後才由 Python 改成上述中文發佈檔名，
-> 以避免中文路徑造成的相容性問題。
+> 打包時 PyInstaller 內部先以 ASCII 名稱編譯，最後才由 Python 改成上述發佈檔名。
+> 發佈檔名一律使用英文。
 
 ## 發佈 Release
 
 建議流程（每次發版）：
 
 1. 更新版本號：改 [`scheduler/branding.py`](scheduler/branding.py) 的 `APP_VERSION`。
-2. 打包：執行 `build.bat`，取得 `dist-pyinstaller\臺灣停車資料上傳系統-<版本>.exe`。
+2. 打包：執行 `build.bat`，取得 `dist-pyinstaller	aiwan-parking-uploader-<版本>.exe`。
 3. 上 GitHub Release（用 [gh CLI](https://cli.github.com/) 最快）：
 
    ```bash
    gh release create v1.1.0 \
-     "dist-pyinstaller/臺灣停車資料上傳系統-1.1.1.exe" \
+     "dist-pyinstaller/taiwan-parking-uploader-1.1.1.exe" \
      --title "v1.1.1" \
      --notes "更新內容..."
    ```

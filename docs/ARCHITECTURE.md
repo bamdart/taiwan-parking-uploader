@@ -91,7 +91,8 @@ Layer 5  main.py（組裝全部）
 
 - `build.bat`：PyInstaller onefile；自動偵測並打包 VC++ / UCRT runtime DLL；
   內部以 ASCII 名稱編譯後，由 Python 依 `branding.RELEASE_NAME` + `APP_VERSION`
-  改成中文發佈檔名；產物於 `dist-pyinstaller/<RELEASE_NAME>-<版本>.exe`。
+  改成英文發佈檔名；產物於 `dist-pyinstaller/<RELEASE_NAME>-<版本>.exe`
+  （即 `taiwan-parking-uploader-<版本>.exe`）。
 - 發佈流程見 README「發佈 Release」：更新 `APP_VERSION` → `build.bat` → GitHub Release。
 
 ## 8. 環境需求
